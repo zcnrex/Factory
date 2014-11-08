@@ -73,7 +73,7 @@ public class Factory extends JFrame {
 		boardPanel.add(boardLabel, BorderLayout.NORTH);
 		boardPanel.add(jsp, BorderLayout.CENTER);
 
-		jsp = new JScrollPane(new JLabel("s1241df"));
+//		jsp = new JScrollPane(new JLabel("s1241df"));
 		workPanel = new JPanel();
 		workPanel.setPreferredSize(new Dimension(600, 600));
 		
@@ -96,21 +96,27 @@ public class Factory extends JFrame {
 					fc.setFileHidingEnabled(true);
 					f = fc.getCurrentDirectory().listFiles();
 
-					setVisible(false);
+					jsp.setVisible(false);
 					getFile();
+					jsp.setVisible(true);	
 			
 				}
-			setVisible(true);	
 			}
 		});
 		setVisible(true);
 	}
 	
+	
+	//Read and parse files 
 	public void getFile(){
 		
 		sb = new StringBuffer();
 		sList = new ArrayList<String>();
+		
+		//iterate through all files
 		for (File file : f){
+			
+			//Dont't read hidden files
 			if (!file.isHidden() ){
 				try {
 					br = new BufferedReader(new FileReader(file));
@@ -129,8 +135,10 @@ public class Factory extends JFrame {
 		}
 		
 		for(int i = 0; i < sList.size(); i++){
+			
 			sToken = new StringTokenizer(sList.get(i));
 //			while (sToken.hasMoreTokens()){
+				//Read the first  token in a string
 				String token = sToken.nextToken();
 //				if (token.equals("[Widget]") || token.equals("[Cog]") || token.equals("[Gadget]")){
 				if (token.length()<9){
@@ -141,16 +149,16 @@ public class Factory extends JFrame {
 					taskName = token.substring(1, token.length()-1);
 					setTaskToJSP(taskName, sToken.nextToken());
 					System.out.println(taskName + " " + token);
-			}
+				}
+				
 		
 		}
 
 	}
 	
+	
 	public void setTaskToJSP(String name, String token){
 		int len = 0;
-
-//		System.out.println("vvv");
 		
 		//get number of tools needs to be made
 		for (int j = 0; j < token.length()-1; j++){
@@ -159,11 +167,9 @@ public class Factory extends JFrame {
 		
 		JLabel[] jl = new JLabel[len];
 		for (int j = 0; j < len; j++){
-			System.out.println("len " + len);
+//			System.out.println("len " + len);
 			jl[j] = new JLabel();
 			jl[j].setText(name + "...Not Built");
-
-//			System.out.println("jl " + jl[j].getText());
 			jspPanel.add(jl[j]);
 		}
 	}
