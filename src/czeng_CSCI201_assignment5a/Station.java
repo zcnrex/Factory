@@ -49,7 +49,6 @@ public class Station extends Infrastructure {
 			return Color.GREEN;
 		else 
 			return Color.RED;
-//		return Color.GREEN;
 	}
 	
 	public String getStatus(){

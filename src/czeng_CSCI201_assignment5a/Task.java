@@ -64,7 +64,7 @@ public class Task {
 		s[13] = new Station("Painting");
 		sList.put("Painting4", s[13]);
 		s[14] = new Station("Press");
-		sList.put("Press", s[14]);
+		sList.put("Press1", s[14]);
 	}
 	
 	public void setMaterial(String s, int n){

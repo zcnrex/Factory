@@ -61,7 +61,6 @@ public class Factory extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		mainPanel = new JPanel();
-//		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
 		mainPanel.setLayout(null);
 		
 		jmb = new JMenuBar();
@@ -82,7 +81,6 @@ public class Factory extends JFrame {
 		boardPanel.add(jsp, BorderLayout.CENTER);
 		boardPanel.setBounds(600, 0, 200, 600);
 
-//		jsp = new JScrollPane(new JLabel("s1241df"));
 		workPanel = new JPanel();
 		workPanel.setPreferredSize(new Dimension(600, 600));
 		
@@ -227,9 +225,9 @@ public class Factory extends JFrame {
 			Iterator it = h.entrySet().iterator();
 			Task t = new Task();
 			int i = 0;
-			woodIcon = new ImageIcon[300];
-			jlWood = new JLabel[300];
-			woodName = new JLabel[30];
+			woodIcon = new ImageIcon[29];
+			jlWood = new JLabel[29];
+			woodName = new JLabel[29];
 			
 			HashMap<String, Material> material = new HashMap<String, Material>();
 			material = t.getMaterials();
@@ -239,9 +237,15 @@ public class Factory extends JFrame {
 			station = t.getStations();
 			
 			while(it.hasNext()){
-//			for (int i = 0; i < 3; i++){
 				Map.Entry pairs = (Map.Entry)it.next();
 				String name = (String)pairs.getKey();
+				if (name.equals("Anvils") || name.equals("Work benches") || name.equals("Furnaces") ||
+						name.equals("Table Saws") || name.equals("Painting Stations") || name.equals("Press")){
+					woodName[i] = new JLabel(name);
+					woodName[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1], 120, 20);
+					this.add(woodName[i]);
+				}
+				else{
 				if ((name.charAt(name.length()-1)-'1') >= 0 && (name.charAt(name.length()-1)-'1') <= 4)
 					name = name.substring(0, name.length()-1);
 				if(name.equals("Painting"))
@@ -249,22 +253,15 @@ public class Factory extends JFrame {
 				else
 					woodIcon[i] = new ImageIcon("images/"+name+".png");
 				if (((int[])pairs.getValue())[1] == 30){
-//					System.out.println((String)pairs.getKey());
 					jlWood[i] = new JLabel((material.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
 					woodName[i] = new JLabel((material.get((String)pairs.getKey())).getName());
 				}
 				else if(((int[])pairs.getValue())[0] == 0){
-//					System.out.println((String)pairs.getKey());
 					jlWood[i] = new JLabel((tool.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
 					woodName[i] = new JLabel((tool.get((String)pairs.getKey())).getName());
 				}
 				else {
-//					System.out.println((String)pairs.getKey());
-//					System.out.println((String)pairs.getKey());
-//					jlWood[i] = new JLabel((station.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
-					jlWood[i] = new JLabel("", woodIcon[i], SwingConstants.CENTER);
-//					jlWood[i] = new JLabel(woodIcon[i], SwingConstants.CENTER);
-//					jlWood[i].setText((station.get((String)pairs.getKey())).getNum());
+					jlWood[i] = new JLabel((station.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
 					woodName[i] = new JLabel((station.get((String)pairs.getKey())).getName());
 					woodName[i].setForeground((station.get((String)pairs.getKey())).getColor());
 				}
@@ -272,49 +269,16 @@ public class Factory extends JFrame {
 				jlWood[i].setVerticalTextPosition(SwingConstants.CENTER);
 				jlWood[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1], 50, 50);
 				
-//				if(((String)pairs.getKey()).equals("Painting"))
-//					woodName[i] = new JLabel("Painting Station");
-//				else
 					
 				woodName[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1] - 20, 80, 20);
 				this.add(woodName[i]);
 				this.add(jlWood[i]);
+				}
 				i++;
-//				System.out.println(i + " " + ((int[])pairs.getValue())[0] + " " + ((int[])pairs.getValue())[1]);
 			}
 			
-						
 			
-//			woodIcon = new ImageIcon("images/wood.png");
-//			jlWood = new JLabel("100", woodIcon, SwingConstants.CENTER);
-//			jlWood.setHorizontalTextPosition(SwingConstants.CENTER);
-//			jlWood.setVerticalTextPosition(SwingConstants.CENTER);
-//			jlWood.setBounds(140, 20, 50, 50);
-//			woodName = new JLabel("Wood");
-//			woodName.setBounds(180, 0, 50, 20);
-//			this.add(woodName);
-//			this.add(jlWood);
-//			
-//			String s = "metal";
-//			metalIcon = new ImageIcon("images/"+s+".png");
-//			jlMetal = new JLabel("100", metalIcon, SwingConstants.CENTER);
-//			jlMetal.setHorizontalTextPosition(SwingConstants.CENTER);
-//			jlMetal.setVerticalTextPosition(SwingConstants.CENTER);
-//			jlMetal.setBounds(280, 20, 50, 50);
-//			metalName = new JLabel("Metal");
-//			metalName.setBounds(305, 0, 50, 20);
-//			this.add(metalName);
-//			this.add(jlMetal);
-//			
-//			plasticIcon = new ImageIcon("images/plastic.png");
-//			jlPlastic = new JLabel("100", plasticIcon, SwingConstants.CENTER);
-//			jlPlastic.setHorizontalTextPosition(SwingConstants.CENTER);
-//			jlPlastic.setVerticalTextPosition(SwingConstants.CENTER);
-//			jlPlastic.setBounds(420, 20, 50, 50);
-//			plasticName = new JLabel("Plastic");
-//			plasticName.setBounds(430, 0, 50, 20);
-//			this.add(plasticName);
-//			this.add(jlPlastic);
+			
 		}
 	}
 	
@@ -322,8 +286,5 @@ public class Factory extends JFrame {
 		Factory f = new Factory();
 		ArrayList<Integer> s = new ArrayList<Integer>();
 		
-//		s.indexOf(s)
-//		s.get
-//		s.cl
 	}
 }

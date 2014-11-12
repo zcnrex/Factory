@@ -15,9 +15,8 @@ public class Position {
 		furnace = 0;
 		saw = 0;
 		painting = 0;
-		pos = new int[23][2];
+		pos = new int[29][2];
 		hashmap = new HashMap<String, int[]>();
-//		press = 0;
 		setPosition();
 		
 	}
@@ -142,10 +141,40 @@ public class Position {
 		pos[21][1] = 510;
 		hashmap.put(s, pos[21]);
 		
-		s = "Press";
+		s = "Press1";
 		pos[22][0] = 420;
 		pos[22][1] = 510;
 		hashmap.put(s, pos[22]);
+		
+		s = "Anvils";
+		pos[23][0] = 170;
+		pos[23][1] = 240;
+		hashmap.put(s, pos[23]);
+		
+		s = "Work benches";
+		pos[24][0] = 310;
+		pos[24][1] = 240;
+		hashmap.put(s, pos[24]);
+		
+		s = "Furnaces";
+		pos[25][0] = 150;
+		pos[25][1] = 400;
+		hashmap.put(s, pos[25]);
+		
+		s = "Table Saws";
+		pos[26][0] = 330;
+		pos[26][1] = 400;
+		hashmap.put(s, pos[26]);
+		
+		s = "Painting Stations";
+		pos[27][0] = 200;
+		pos[27][1] = 560;
+		hashmap.put(s, pos[27]);
+		
+		s = "Press";
+		pos[28][0] = 430;
+		pos[28][1] = 560;
+		hashmap.put(s, pos[28]);
 		
 	}	
 	
