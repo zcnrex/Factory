@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -45,13 +46,18 @@ public class Factory extends JFrame {
 	private BufferedReader br;
 	private ArrayList<String> sList;
 	
-	private JPanel mainPanel, workPanel, jspPanel;
+	private Tasks tasks = new Tasks();
+	
+	private JPanel jspPanel;
+	private MainPanel mainPanel = new MainPanel();
+	private WorkPanel workPanel = new WorkPanel(tasks);
 	private JPanel boardPanel;
 	private JLabel boardLabel;
 	private ArrayList<JLabel> taskList;
 	
 	private StringTokenizer sToken;
 	private String taskName;
+	
 		
 	public Factory(){
 		super("Factory");
@@ -60,8 +66,10 @@ public class Factory extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		mainPanel = new JPanel();
-		mainPanel.setLayout(null);
+//		mainPanel = new JPanel();
+//		mainPanel.setLayout(null);
+		Thread t = new Thread(mainPanel);
+		t.start();
 		
 		jmb = new JMenuBar();
 		openFolder = new JMenuItem("Open Folder...");
@@ -81,8 +89,8 @@ public class Factory extends JFrame {
 		boardPanel.add(jsp, BorderLayout.CENTER);
 		boardPanel.setBounds(600, 0, 200, 600);
 
-		workPanel = new JPanel();
-		workPanel.setPreferredSize(new Dimension(600, 600));
+//		workPanel = new JPanel();
+//		workPanel.setPreferredSize(new Dimension(600, 600));
 		
 //		mainPanel.add(workPanel);
 		mainPanel.add(boardPanel);
@@ -102,10 +110,10 @@ public class Factory extends JFrame {
 				if(choice == JFileChooser.APPROVE_OPTION){
 					fc.setFileHidingEnabled(true);
 					f = fc.getCurrentDirectory().listFiles();
+					
+//					Parser parser = new Parser(f, this);
 
-					setVisible(false);
 					getFile();
-					setVisible(true);					
 			
 				}
 			}
@@ -117,65 +125,14 @@ public class Factory extends JFrame {
 	//Read and parse files 
 	public void getFile(){
 		
-		sb = new StringBuffer();
-		sList = new ArrayList<String>();
-		
-		//iterate through all files
-		for (File file : f){
-			
-			//Dont't read hidden files
-			if (!file.isHidden() ){
-				try {
-					br = new BufferedReader(new FileReader(file));
-				
-					String s = null;
-					while ((s = br.readLine()) != null){
-						sb.append(s);
-						sb.append(" ");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			sList.add(sb.toString());
-			sb = new StringBuffer();
-		}
-		
-		for(int i = 0; i < sList.size(); i++){
-			
-			sToken = new StringTokenizer(sList.get(i));
-//			while (sToken.hasMoreTokens()){
-				//Read the first  token in a string
-				String token = sToken.nextToken();
-//				sToken.
-//				if (token.equals("[Widget]") || token.equals("[Cog]") || token.equals("[Gadget]")){
-				if (token.length()<9){
-					taskName = token.substring(1, token.length()-1);
-					setTaskToJSP(taskName, sToken.nextToken());
-				}
-				else if (!token.substring(1, 8).equals("Workers")){
-					taskName = token.substring(1, token.length()-1);
-					setTaskToJSP(taskName, sToken.nextToken());
-					System.out.println(taskName + " " + token);
-				}
-				else{
-					setupFactory(sToken);
-					continue;
-				}
-				
-				token = sToken.nextToken();
-//				while(token.contains(":")){
-//					
-//				}
-		
-		}
+		Parser parser = new Parser(f, this);
 		
 		//Set up containers
-		WorkPanel wp = new WorkPanel();
-		wp.setBounds(0, 0, 600, 600);
-		mainPanel.remove(boardPanel);
-		mainPanel.add(wp);
-		mainPanel.add(boardPanel);
+//		WorkPanel wp = new WorkPanel();
+		workPanel.setBounds(0, 0, 600, 600);
+		Thread twp = new Thread(workPanel);
+		twp.start();
+		mainPanel.add(workPanel);
 
 	}
 	
@@ -198,89 +155,42 @@ public class Factory extends JFrame {
 	}
 	
 	public void setupFactory(StringTokenizer st){
-		
+		String s = "";
+		int i = 0;
+		String substring = "";
+//		Tasks t = new Tasks();
+		while(st.hasMoreTokens()){
+			s = st.nextToken();
+			int len = 0;
+			
+			//get number of tools needs to be made
+			for (int j = 0; j < s.length()-2-s.indexOf(":"); j++){
+				System.out.println(Character.getNumericValue(s.charAt(s.length()-j-2)));
+				len = (int) (Math.pow(10, j) * (Character.getNumericValue(s.charAt(s.length()-j-2))));
+			}
+			System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
+			substring = s.substring(1, s.indexOf(":")-1);
+			if (substring.equals("Plier") || substring.equals("Scissor")){
+				tasks.setTool(substring+"s", len);
+			}
+			else if (substring.equals("Paintbrushe")) tasks.setTool("Paintbrush", len);
+			else tasks.setTool(substring, len);
+		}
 	}
 	
-	class NewPanel extends JPanel implements Runnable{
-		NewPanel(){
-			super();
-		}
-		public void run(){
-			while(true){
-				repaint();
+//	class NewPanel extends JPanel implements Runnable{
+//		NewPanel(){
+//			super();
+//		}
+//		public void run(){
+//			while(true){
+//				repaint();
+//				revalidate();
+//			}
+//		}
+//	}
+	
 
-			}
-		}
-	}
-	
-	class WorkPanel extends JPanel{
-		private JLabel[] jlWood, jlMetal, jlPlastic, woodName, metalName, plasticName;
-		private ImageIcon[] woodIcon, metalIcon, plasticIcon;
-		WorkPanel(){
-			this.setLayout(null);
-			
-			
-			Position p = new Position();
-			HashMap<String, int[]> h = p.getAllPositions();
-			Iterator it = h.entrySet().iterator();
-			Task t = new Task();
-			int i = 0;
-			woodIcon = new ImageIcon[29];
-			jlWood = new JLabel[29];
-			woodName = new JLabel[29];
-			
-			HashMap<String, Material> material = new HashMap<String, Material>();
-			material = t.getMaterials();
-			HashMap<String, Tool> tool = new HashMap<String, Tool>();
-			tool = t.getTools();
-			HashMap<String, Station> station = new HashMap<String, Station>();
-			station = t.getStations();
-			
-			while(it.hasNext()){
-				Map.Entry pairs = (Map.Entry)it.next();
-				String name = (String)pairs.getKey();
-				if (name.equals("Anvils") || name.equals("Work benches") || name.equals("Furnaces") ||
-						name.equals("Table Saws") || name.equals("Painting Stations") || name.equals("Press")){
-					woodName[i] = new JLabel(name);
-					woodName[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1], 120, 20);
-					this.add(woodName[i]);
-				}
-				else{
-				if ((name.charAt(name.length()-1)-'1') >= 0 && (name.charAt(name.length()-1)-'1') <= 4)
-					name = name.substring(0, name.length()-1);
-				if(name.equals("Painting"))
-					woodIcon[i] = new ImageIcon("images/Paintingstation.png");
-				else
-					woodIcon[i] = new ImageIcon("images/"+name+".png");
-				if (((int[])pairs.getValue())[1] == 30){
-					jlWood[i] = new JLabel((material.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
-					woodName[i] = new JLabel((material.get((String)pairs.getKey())).getName());
-				}
-				else if(((int[])pairs.getValue())[0] == 0){
-					jlWood[i] = new JLabel((tool.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
-					woodName[i] = new JLabel((tool.get((String)pairs.getKey())).getName());
-				}
-				else {
-					jlWood[i] = new JLabel((station.get((String)pairs.getKey())).getNum(), woodIcon[i], SwingConstants.CENTER);
-					woodName[i] = new JLabel((station.get((String)pairs.getKey())).getName());
-					woodName[i].setForeground((station.get((String)pairs.getKey())).getColor());
-				}
-				jlWood[i].setHorizontalTextPosition(SwingConstants.CENTER);
-				jlWood[i].setVerticalTextPosition(SwingConstants.CENTER);
-				jlWood[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1], 50, 50);
-				
-					
-				woodName[i].setBounds(((int[])pairs.getValue())[0], ((int[])pairs.getValue())[1] - 20, 80, 20);
-				this.add(woodName[i]);
-				this.add(jlWood[i]);
-				}
-				i++;
-			}
-			
-			
-			
-		}
-	}
 	
 	public static void main(String[] args){
 		Factory f = new Factory();

@@ -2,13 +2,13 @@ package czeng_CSCI201_assignment5a;
 
 import java.util.HashMap;
 
-public class Task {
+public class Tasks {
 	private HashMap<String, Material> mList;
 	private HashMap<String, Tool> tList;
 	private HashMap<String, Station> sList;
 	private String status, name;
 	
-	public Task(){
+	public Tasks(){
 		mList = new HashMap<String, Material>();
 		tList = new HashMap<String, Tool>();
 		sList = new HashMap<String, Station>();
@@ -71,6 +71,10 @@ public class Task {
 		Material m = new Material(s);
 		
 		mList.put(s, m);
+	}
+	
+	public void setTool(String s, int n){
+		tList.get(s).setNum(n);
 	}
 	
 	public HashMap<String, Tool> getTools(){

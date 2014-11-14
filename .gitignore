@@ -1,6 +1,8 @@
 #files in project
 assignment5examples/
 images/
+*.rcp
+*.factory
 bin/
 .classpath
 .project
