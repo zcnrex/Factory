@@ -40,17 +40,19 @@ public class Factory extends JFrame {
 	private JMenuBar jmb;
 	private JMenuItem openFolder;
 	private JScrollPane jsp;
+	private JLabel[] jl;
 	
 	private File[] f;
 	private StringBuffer sb;
 	private BufferedReader br;
 	private ArrayList<String> sList;
 	
-	private Tasks tasks = new Tasks();
+	private Tasks tasks = new Tasks(); // this stores every material and tool the factory possesses
+	private TaskPool taskPool = new TaskPool();
 	
 	private JPanel jspPanel;
 	private MainPanel mainPanel = new MainPanel();
-	private WorkPanel workPanel = new WorkPanel(tasks);
+	private WorkPanel workPanel;
 	private JPanel boardPanel;
 	private JLabel boardLabel;
 	private ArrayList<JLabel> taskList;
@@ -104,14 +106,13 @@ public class Factory extends JFrame {
 			public void actionPerformed(ActionEvent ae){
 				JFileChooser fc = new JFileChooser("/Users/rexzeng/Documents/CS201/czeng_CSCI201_assignment5a");
 				fc.setDialogTitle("Choose a file");
-//				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fc.setAcceptAllFileFilterUsed(false);
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//				fc.setAcceptAllFileFilterUsed(false);
 				int choice = fc.showOpenDialog(openFolder);
 				if(choice == JFileChooser.APPROVE_OPTION){
-					fc.setFileHidingEnabled(true);
-					f = fc.getCurrentDirectory().listFiles();
+//					fc.setFileHidingEnabled(true);
 					
-//					Parser parser = new Parser(f, this);
+					f = fc.getSelectedFile().listFiles();
 
 					getFile();
 			
@@ -124,11 +125,13 @@ public class Factory extends JFrame {
 	
 	//Read and parse files 
 	public void getFile(){
+//		synchronized{
 		
-		Parser parser = new Parser(f, this);
-		
+		Parser parser = new Parser(f, this, taskPool);
+//		}
 		//Set up containers
 //		WorkPanel wp = new WorkPanel();
+		workPanel = new WorkPanel(tasks, this);
 		workPanel.setBounds(0, 0, 600, 600);
 		Thread twp = new Thread(workPanel);
 		twp.start();
@@ -137,21 +140,29 @@ public class Factory extends JFrame {
 	}
 	
 	
-	public void setTaskToJSP(String name, String token){
-		int len = 0;
+	public void setTaskToJSP(){
+		int len = taskPool.getSize();
 		
-		//get number of tools needs to be made
-		for (int j = 0; j < token.length()-1; j++){
-			len = (int) (Math.pow(10, j) * (Character.getNumericValue(token.charAt(token.length()-j-1))));
-		}
-		
-		JLabel[] jl = new JLabel[len];
+		//get number of products needs to be made
+//		for (int j = 0; j < token.length()-1; j++){
+//			len = (int) (Math.pow(10, j) * (Character.getNumericValue(token.charAt(token.length()-j-1))));
+//		}
+//		
+		jl = new JLabel[len];
+//		Task task;
 		for (int j = 0; j < len; j++){
-//			System.out.println("len " + len);
+			System.out.println("len " + len);
+//			task = new Task(taskName);
+//			taskPool.addTask(task);
 			jl[j] = new JLabel();
-			jl[j].setText(name + "...Not Built");
+			jl[j].setText(taskPool.getTask(j).getName() + "..." + taskPool.getTask(j).getStatus());
 			jspPanel.add(jl[j]);
 		}
+	}
+	
+	public void setJl(int i){
+		System.out.println("in Setjl: " + taskPool.getTask(i).getStatus());
+		jl[i].setText(taskPool.getTask(i).getName() + "..." + taskPool.getTask(i).getStatus());
 	}
 	
 	public void setupFactory(StringTokenizer st){
@@ -163,12 +174,12 @@ public class Factory extends JFrame {
 			s = st.nextToken();
 			int len = 0;
 			
-			//get number of tools needs to be made
+			//get number of tools the factory has
 			for (int j = 0; j < s.length()-2-s.indexOf(":"); j++){
-				System.out.println(Character.getNumericValue(s.charAt(s.length()-j-2)));
+//				System.out.println(Character.getNumericValue(s.charAt(s.length()-j-2)));
 				len = (int) (Math.pow(10, j) * (Character.getNumericValue(s.charAt(s.length()-j-2))));
 			}
-			System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
+//			System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
 			substring = s.substring(1, s.indexOf(":")-1);
 			if (substring.equals("Plier") || substring.equals("Scissor")){
 				tasks.setTool(substring+"s", len);
@@ -176,6 +187,14 @@ public class Factory extends JFrame {
 			else if (substring.equals("Paintbrushe")) tasks.setTool("Paintbrush", len);
 			else tasks.setTool(substring, len);
 		}
+	}
+	
+	public TaskPool getTaskPool(){
+		return taskPool;
+	}
+	
+	public Tasks getTasks(){
+		return tasks;
 	}
 	
 //	class NewPanel extends JPanel implements Runnable{

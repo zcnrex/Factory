@@ -41,7 +41,7 @@ public class Station extends Infrastructure {
 	}
 	
 	public String getName(){
-		return status;
+		return this.name;
 	}
 	
 	public Color getColor(){

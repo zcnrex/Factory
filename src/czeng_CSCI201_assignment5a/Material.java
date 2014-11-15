@@ -17,7 +17,9 @@ public class Material extends Infrastructure{
 		this.name = s;
 	}
 	
-	public void setNum(int i){}
+	public void setNum(int i){
+		this.num = i;
+	}
 	
 	public void use(int n){
 		this.num -= n;

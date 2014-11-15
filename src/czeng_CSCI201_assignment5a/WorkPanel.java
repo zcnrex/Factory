@@ -18,6 +18,7 @@ class WorkPanel extends JPanel implements Runnable{
 	private Vector<ImageIcon> imgIcon = new Vector<ImageIcon>();
 	private Vector<Worker> wokers = new Vector<Worker>();
 	private Position position = new Position();
+	private Factory factory;
 	
 	private HashMap<String, int[]> positionMap = position.getAllPositions();
 	private HashMap<String, Material> material = new HashMap<String, Material>();
@@ -27,11 +28,13 @@ class WorkPanel extends JPanel implements Runnable{
 
 	private Tasks tasks = new Tasks();
 	
-	Worker w = new Worker();
+	Worker w;
 	
-	WorkPanel(Tasks tasks){
+	WorkPanel(Tasks tasks, Factory factory){
 		this.setLayout(null);	
 		this.tasks = tasks;
+		this.factory = factory;
+		 w = new Worker(position, factory);
 		w.start();	
 	}
 	
@@ -78,10 +81,9 @@ class WorkPanel extends JPanel implements Runnable{
 				}
 				else {
 					g.setColor((station.get((String)pairs.getKey())).getColor());
-					g.drawString((station.get((String)pairs.getKey())).getName(), ((int[])pairs.getValue())[0] + 3, ((int[])pairs.getValue())[1] - 5);
+					g.drawString((station.get((String)pairs.getKey())).getStatus(), ((int[])pairs.getValue())[0] + 3, ((int[])pairs.getValue())[1] - 5);
 				}
 			}
-			
 		w.drawWorker(g);
 		}
 		
@@ -90,7 +92,7 @@ class WorkPanel extends JPanel implements Runnable{
 	public void run(){
 		while(true){
 			repaint();
-			
+			revalidate();
 		}
 	}
 	

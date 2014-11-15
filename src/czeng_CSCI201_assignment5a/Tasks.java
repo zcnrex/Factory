@@ -2,6 +2,7 @@ package czeng_CSCI201_assignment5a;
 
 import java.util.HashMap;
 
+//Actually it stores every materials and tools in the factory
 public class Tasks {
 	private HashMap<String, Material> mList;
 	private HashMap<String, Tool> tList;
