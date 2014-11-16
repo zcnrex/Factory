@@ -68,11 +68,6 @@ public class Worker extends Thread{
 	
 	public void run(){
 		try {
-//			System.out.println(factory);
-//			int[] p = new int[2];
-//			for (int i = 0; i < posList.size(); i++){
-//				p = posList.get(i);
-//				p = position.getPosition(task.getMaterial(i).getName());
 			sleep(workerNum*500+1000);
 			while(pos[1] < 80){
 				sleep(1);				
@@ -85,32 +80,38 @@ public class Worker extends Thread{
 			sleep(200);
 			int[] p = new int[2];
 			for (int i = 0; i < factory.getTaskPool().getTasks().size(); i++){
-	//			int i= 0;
-//				System.out.println("i: " + i);
-	//			sleep(100);
 				this.setTask(factory.getTaskPool().getTask(i));
-	//			task = factory.getTaskPool().getTask(0);
 				if (!task.getStatus().equals("Not Built")) continue;
 				factory.getTaskPool().getTask(i).setStatus("In Progress");
-				System.out.println("Task name: "+ task.getName() + " " + task.getStatus());
 				factory.setJl(i);
 				for (Material m : task.getMeterials()){
-	//				p = posList.get(i);
 					p = position.getPosition(m.getName());
 					move(p, 50, 0);
-	//				System.out.println(task.getMeterials().size());
-	//				System.out.println(m.getNum());
-	//				System.out.println(m.getName());
 					factory.getTasks().getMaterials().get(m.getName()).use(Integer.parseInt(m.getNum()));
-	//				factory.setTaskToJSP(factory.getTaskPool());
 					sleep(200);
 				}
 	
-	//			System.out.println(task.getTaskPieces().size());
+				Vector<Integer> virtulTools;
 				for (TaskPiece tp : task.getTaskPieces()){
-					if (tp.hasTools()){
+					if(!tp.getTools().isEmpty()){
+						p = position.getPosition(tp.getTools().firstElement().getName());
+						move(p, 50, 0);
+						
+						boolean b = true;
+						while(true){
+							b = false;
+							for(Tool t : tp.getTools()){
+								while(factory.getTasks().getToolNumber().get(t.getName()) < t.getNumber()){
+									b = true;
+								}
+							}
+							if(!b)
+								break;
+						}
 						for(Tool t : tp.getTools()){
-							System.out.println(t.getName());
+							factory.getTasks().useVirtualTool(t.getName(), t.getNumber());
+						}
+						for(Tool t : tp.getTools()){
 							
 							p = position.getPosition(t.getName());
 							move(p, 50, 0);
@@ -123,49 +124,33 @@ public class Worker extends Thread{
 						}
 					}
 					Station s = tp.getStation();
-					System.out.println(s.getName());
 						
 					p = position.getPosition(s.getName()+"1");
 					move(p, 0, -80);
-//					stationAvailable.
-					//while(lock.acquired)
-					//{sleep}
-//					lock.
-//					Semaphore numTablesSemaphore = new Semaphore(1);
-//					numTablesSemaphore.
-//					this.wait();
-					
-//					lock.lock();
-//					while(!factory.getTasks().getStations().get(s.getName()+"1").getStatus().equals("Open")){
-//						sleep(1000);
-//					}
-					factory.getTasks().getStations().get(s.getName()+"1").setTime(s.getTime());
-					factory.getTasks().getStations().get(s.getName()+"1").inUse(p, pos);
-//					lock.
-//					while(factory.getTasks().getStations().get(s.getName()+"1").getLock().tryLock()){
-//						sleep(100);
-//					}
-//					move(p, 0, 0);
-//					for(int k = 0; k < s.getTime(); k++){
-//	//					factory.getTaskPool().getTask(0).getTaskPieces().get(0).getStation().setStatus((s.getTime()-k) + "s");
-//						factory.getTasks().getStations().get(s.getName()+"1").setStatus((s.getTime()-k) + "s");
-//	//					factory.se
-//						sleep(1000);
-//					}
-
-//					factory.getTasks().getStations().get(s.getName()+"1").finished();
-//					factory.getTasks().getStations().get(s.getName()+"1").setStatus("Open");
-//					lock.unlock();
-//					factory.getTasks().getStations().get(s.getName()+"1").getLock().unlock();
+					int a = 1;
+					while(true){
+						if (factory.getTasks().getStations().get(s.getName()+a).getStatus().equals("Open")){
+							p = position.getPosition(s.getName()+a);
+							factory.getTasks().getStations().get(s.getName()+a).inUse(p, pos, s.getTime());
+							break;
+						}
+						if (factory.getTasks().getStations().containsKey(s.getName()+(a+1))){
+							a++;
+						}
+						else a = 1;
+						sleep(50);
+					}
 					if (tp.hasTools()){
 						for(Tool t : tp.getTools()){
-							System.out.println(t.getName());
 							
 							p = position.getPosition(t.getName());
 							move(p, 50, 0);
 							factory.getTasks().getTools().get(t.getName()).returnTool(t.getNumber());
 							sleep(200);
 							
+						}
+						for(Tool t : tp.getTools()){
+							factory.getTasks().returnVirtualTool(t.getName(), t.getNumber());
 						}
 					}
 				}
@@ -181,6 +166,14 @@ public class Worker extends Thread{
 				factory.getTaskPool().getTask(i).setStatus("Complete!");
 				factory.setJl(i);
 				sleep(200);
+			}
+			while(true){
+				if(factory.getTaskPool().getTask(factory.getTaskPool().getTasks().size()-1).getStatus().equals("Complete!"))
+					break;
+			}
+			
+			while(pos[0] < 1000){			
+				pos[0]++;
 			}
 			
 		} catch (InterruptedException e) {
@@ -207,7 +200,6 @@ public class Worker extends Thread{
 				sleep(1);				
 				pos[0]--;
 			}
-//			sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

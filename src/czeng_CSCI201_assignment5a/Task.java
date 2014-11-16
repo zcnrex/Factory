@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class Task implements Serializable{
-//	private HashMap<String, Material> mList;
-//	private HashMap<String, Tool> tList;
-//	private HashMap<String, Station> sList;
 	private String status = "", name = "";
 	private int numTask = 0;
 	
@@ -26,7 +23,6 @@ public class Task implements Serializable{
 		super();
 		status = "Not Built";
 		this.name = name;
-//		this.numTask = num;
 	}
 	
 	public void addTaskPiece(TaskPiece tp){
@@ -99,13 +95,4 @@ public class Task implements Serializable{
         return obj;
     }
 	
-//	public void setTask(Task task){
-//		thisx = new Task();
-//		
-//	}
-	
-//	public static void main(String[] args){
-//		Task t = new Task();
-//		System.out.println(t.getMaterials().get("Wood").getName());
-//	}
 }

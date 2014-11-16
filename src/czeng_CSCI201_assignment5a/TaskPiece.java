@@ -9,8 +9,6 @@ public class TaskPiece implements Serializable{
 	
 	public TaskPiece(){
 		super();
-//		tools = new Vector<Tool>();
-//		stations = new Vector<Station>();
 	}
 	
 	public void setTool(String st, int num){

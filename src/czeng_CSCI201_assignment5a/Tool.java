@@ -9,15 +9,15 @@ public class Tool implements Serializable{
 	public Tool(){
 		super();
 		this.name = "";
-		this.num = 5;
-		this.sum = 5;
+		this.num = 0;
+		this.sum = 0;
 	}
 	
 	public Tool(String name){
 		super();
 		this.name = name;
-		this.num = 5;
-		this.sum = 5;
+		this.num = 0;
+		this.sum = 0;
 	}
 	
 	public Tool(String name, int sum){

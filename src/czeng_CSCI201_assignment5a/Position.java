@@ -1,11 +1,9 @@
 package czeng_CSCI201_assignment5a;
 
-//import java.awt.Dimension;
 import java.util.HashMap;
 
 public class Position {
 	private int[][] pos;
-//	private String name;
 	private int anvil, workbench, furnace, saw, painting;
 	private HashMap<String, int[]> hashmap;
 	
@@ -185,65 +183,4 @@ public class Position {
 	public HashMap<String, int[]> getAllPositions(){
 		return hashmap;
 	}
-		
-//	public int[] getPosition(String name){
-//		if (name.equals("Wood")){
-//			pos[0] = 140;
-//			pos[1] = 30;
-//		}
-//		else if (name.equals("Metal")){
-//			pos[0] = 280;
-//			pos[1] = 30;
-//		}
-//		else if (name.equals("Plastic")){
-//			pos[0] = 420;
-//			pos[1] = 30;
-//		}
-//		else if (name.equals("Screwdriver")){
-//			pos[0] = 0;
-//			pos[1] = 190;
-//		}
-//		else if (name.equals("Hammer")){
-//			pos[0] = 0;
-//			pos[1] = 270;
-//		}
-//		else if (name.equals("Paintbrush")){
-//			pos[0] = 0;
-//			pos[1] = 350;
-//		}
-//		else if (name.equals("Pliers")){
-//			pos[0] = 0;
-//			pos[1] = 430;
-//		}
-//		else if (name.equals("Scissors")){
-//			pos[0] = 0;
-//			pos[1] = 510;
-//		}
-//		else if (name.equals("Anvil")){
-//			pos[0] = 140 + 70 * anvil++;
-//			pos[1] = 190;
-//		}
-//		else if (name.equals("Workbench")){
-//			pos[0] = 280 + 70 * workbench++;
-//			pos[1] = 190;
-//		}
-//		else if (name.equals("Furnace")){
-//			pos[0] = 140 + 70 * furnace++;
-//			pos[1] = 350;
-//		}
-//		else if (name.equals("Saw")){
-//			pos[0] = 280 + 70 * saw++;
-//			pos[1] = 350;
-//		}
-//		else if (name.equals("Painting")){
-//			pos[0] = 140 + 70 * painting++;
-//			pos[1] = 510;
-//		}
-//		else if (name.equals("Press")){
-//			pos[0] = 420;
-//			pos[1] = 510;
-//		}
-//		
-//		return pos;
-//	}
 }

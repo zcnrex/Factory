@@ -15,16 +15,6 @@ public class MainPanel extends JPanel implements Runnable{
 	private JLabel boardLabel = new JLabel("Task Board");
 	public MainPanel(){
 		this.setLayout(null);
-//
-//		boardPanel.setLayout(new BorderLayout());
-//		jspPanel.setLayout(new BoxLayout(jspPanel, BoxLayout.Y_AXIS));
-//		jsp = new JScrollPane(jspPanel);
-//		jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//		jsp.setMaximumSize(new Dimension(200, 10000));
-//		
-//		boardPanel.add(boardLabel, BorderLayout.NORTH);
-//		boardPanel.add(jsp, BorderLayout.CENTER);
-//		boardPanel.setBounds(600, 0, 200, 600);
 	}
 	
 	public void run(){

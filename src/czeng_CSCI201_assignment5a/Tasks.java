@@ -7,6 +7,7 @@ public class Tasks {
 	private HashMap<String, Material> mList;
 	private HashMap<String, Tool> tList;
 	private HashMap<String, Station> sList;
+	private HashMap<String, Integer> toolNumList;
 	private String status, name;
 	private int numWorker = 0;
 	
@@ -14,6 +15,7 @@ public class Tasks {
 		mList = new HashMap<String, Material>();
 		tList = new HashMap<String, Tool>();
 		sList = new HashMap<String, Station>();
+		toolNumList = new HashMap<String, Integer>();
 		Material[] m = new Material[3];
 		m[0] = new Material("Wood");
 		mList.put("Wood", m[0]);
@@ -22,20 +24,23 @@ public class Tasks {
 		m[2] = new Material("Plastic");
 		mList.put("Plastic", m[2]);
 		
-//		Tool t = new Tool("Screwdriver");
 		Tool[] t = new Tool[5];
 		t[0] = new Tool("Screwdriver");
 		tList.put(t[0].getName(), t[0]);
+		toolNumList.put(t[0].getName(), 0);
 		t[1] = new Tool("Hammer");
 		tList.put(t[1].getName(), t[1]);
+		toolNumList.put(t[1].getName(), 0);
 		t[2] = new Tool("Paintbrush");
 		tList.put(t[2].getName(), t[2]);
+		toolNumList.put(t[2].getName(), 0);
 		t[3] = new Tool("Pliers");
 		tList.put(t[3].getName(), t[3]);
+		toolNumList.put(t[3].getName(), 0);
 		t[4] = new Tool("Scissors");
 		tList.put(t[4].getName(), t[4]);
+		toolNumList.put(t[4].getName(), 0);
 		
-//		Station s = new Station("Anvil");
 		Station[] s = new Station[15];
 		s[0] = new Station("Anvil");
 		sList.put("Anvil1", s[0]);
@@ -85,6 +90,15 @@ public class Tasks {
 	
 	public void setTool(String s, int n){
 		tList.get(s).setNum(n);
+		toolNumList.replace(s, n);
+	}
+	
+	public void useVirtualTool(String s, int n){
+		toolNumList.replace(s, toolNumList.get(s)-n);
+	}
+	
+	public void returnVirtualTool(String s, int n){
+		toolNumList.replace(s, toolNumList.get(s)+n);
 	}
 	
 	public HashMap<String, Tool> getTools(){
@@ -97,8 +111,8 @@ public class Tasks {
 		return sList;
 	}
 	
-//	public static void main(String[] args){
-//		Task t = new Task();
-//		System.out.println(t.getMaterials().get("Wood").getName());
-//	}
+	public HashMap<String, Integer> getToolNumber(){
+		return toolNumList;
+	}
+	
 }

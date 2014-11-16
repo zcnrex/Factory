@@ -71,19 +71,12 @@ public class Station implements Serializable{
 		return lock;
 	}
 	
-	public void inUse(int[]p, int[] pos){
+	public void inUse(int[]p, int[] pos, int time){
 		lock.lock();
 		try {
+			this.time = time;
 
 //			System.out.println("!!!!!!!");
-			while(pos[1] < p[1] + 0){
-				Thread.sleep(1);				
-				pos[1]++;
-			}
-			while(pos[1] > p[1] + 0){
-				Thread.sleep(1);				
-				pos[1]--;
-			}
 			while(pos[0] < (p[0] + 0)){
 				Thread.sleep(1);				
 				pos[0]++;
@@ -93,8 +86,16 @@ public class Station implements Serializable{
 					Thread.sleep(1);
 				pos[0]--;
 			}
+			while(pos[1] < p[1] + 0){
+				Thread.sleep(1);				
+				pos[1]++;
+			}
+			while(pos[1] > p[1] + 0){
+				Thread.sleep(1);				
+				pos[1]--;
+			}
+			
 		
-//			stationAvailable.await();
 			for(int i = 0; i < time; i ++){
 
 				setStatus((time-i) + "s");

@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -72,8 +73,6 @@ public class Factory extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-//		mainPanel = new JPanel();
-//		mainPanel.setLayout(null);
 		Thread t = new Thread(mainPanel);
 		t.start();
 		
@@ -95,10 +94,6 @@ public class Factory extends JFrame {
 		boardPanel.add(jsp, BorderLayout.CENTER);
 		boardPanel.setBounds(600, 0, 200, 600);
 
-//		workPanel = new JPanel();
-//		workPanel.setPreferredSize(new Dimension(600, 600));
-		
-//		mainPanel.add(workPanel);
 		mainPanel.add(boardPanel);
 
 		add(mainPanel);		
@@ -108,22 +103,61 @@ public class Factory extends JFrame {
 		f = null;
 		openFolder.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae){
-				JFileChooser fc = new JFileChooser("/Users/rexzeng/Documents/CS201/czeng_CSCI201_assignment5a");
+				JFileChooser fc = new JFileChooser();
 				fc.setDialogTitle("Choose a file");
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//				fc.setAcceptAllFileFilterUsed(false);
 				int choice = fc.showOpenDialog(openFolder);
 				if(choice == JFileChooser.APPROVE_OPTION){
-//					fc.setFileHidingEnabled(true);
-					
 					f = fc.getSelectedFile().listFiles();
-
 					getFile();
 			
 				}
 			}
 		});
 		setVisible(true);
+		while(true){
+			if(taskPool.getTasks().size()>0)
+			if(taskPool.getRecentTask().getStatus().equals("Complete!")){
+				int selection = JOptionPane.showConfirmDialog(this, "Want to play again?", "Complete!", JOptionPane.YES_NO_OPTION);
+				switch (selection) {
+					case JOptionPane.YES_OPTION:
+						for (int k = 0; k < workers.size(); k++){
+							workers.get(k).interrupt();
+							
+						}
+						taskPool = null;
+						taskPool = new TaskPool();
+						tasks = null;
+						tasks = new Tasks();
+						workers = null;
+						workers = new Vector<Worker>();
+						mainPanel.remove(workPanel);
+						jl = null;
+						jspPanel = null;
+						jspPanel = new JPanel();
+						jspPanel.setLayout(new BoxLayout(jspPanel, BoxLayout.Y_AXIS));
+						jsp = null;
+						jsp = new JScrollPane(jspPanel);
+						jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+						jsp.setMaximumSize(new Dimension(200, 10000));
+						boardPanel.remove(jsp);
+						boardPanel.add(jsp, BorderLayout.CENTER);
+						JFileChooser fc = new JFileChooser();
+						fc.setDialogTitle("Choose a file");
+						fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						int choice = fc.showOpenDialog(openFolder);
+						if(choice == JFileChooser.APPROVE_OPTION){
+							f = fc.getSelectedFile().listFiles();
+		
+							getFile();			
+						}
+						break;
+					case JOptionPane.NO_OPTION: 
+						System.exit(NORMAL);
+						break;
+				}
+			}
+		}
 	}
 	
 	
@@ -154,18 +188,8 @@ public class Factory extends JFrame {
 	
 	public void setTaskToJSP(){
 		int len = taskPool.getSize();
-		
-		//get number of products needs to be made
-//		for (int j = 0; j < token.length()-1; j++){
-//			len = (int) (Math.pow(10, j) * (Character.getNumericValue(token.charAt(token.length()-j-1))));
-//		}
-//		
 		jl = new JLabel[len];
-//		Task task;
 		for (int j = 0; j < len; j++){
-//			System.out.println("len " + len);
-//			task = new Task(taskName);
-//			taskPool.addTask(task);
 			jl[j] = new JLabel();
 			jl[j].setText(taskPool.getTask(j).getName() + "..." + taskPool.getTask(j).getStatus());
 			jspPanel.add(jl[j]);
@@ -173,7 +197,6 @@ public class Factory extends JFrame {
 	}
 	
 	public void setJl(int i){
-//		System.out.println("in Setjl: " + taskPool.getTask(i).getStatus());
 		jl[i].setText(taskPool.getTask(i).getName() + "..." + taskPool.getTask(i).getStatus());
 	}
 	
@@ -181,27 +204,28 @@ public class Factory extends JFrame {
 		
 		int i = 0;
 		String substring = "";
-//		Tasks t = new Tasks();
-		while(st.hasMoreTokens()){
+		while(true){
 			int len = 0;
 			
 			//get number of tools the factory has
 			for (int j = 0; j < s.length()-2-s.indexOf(":"); j++){
-//				System.out.println(Character.getNumericValue(s.charAt(s.length()-j-2)));
 				len = (int) (Math.pow(10, j) * (Character.getNumericValue(s.charAt(s.length()-j-2))));
 			}
-//			System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
 			substring = s.substring(1, s.indexOf(":")-1);
 			if (substring.equals("Plier") || substring.equals("Scissor")){
 				tasks.setTool(substring+"s", len);
 			}
-			else if (substring.equals("Paintbrushe")) tasks.setTool("Paintbrush", len);
+			else if (substring.contains("Paintbrush")) {
+				tasks.setTool("Paintbrush", len);
+			}
 			else if (substring.contains("Worker")){
 				tasks.setWorker(len);
-//				System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
 			}
 			else tasks.setTool(substring, len);
-			s = st.nextToken();
+			if(st.hasMoreTokens()){
+				s = st.nextToken();
+			}
+			else break;
 		}
 	}
 	
@@ -212,19 +236,6 @@ public class Factory extends JFrame {
 	public Tasks getTasks(){
 		return tasks;
 	}
-	
-//	class NewPanel extends JPanel implements Runnable{
-//		NewPanel(){
-//			super();
-//		}
-//		public void run(){
-//			while(true){
-//				repaint();
-//				revalidate();
-//			}
-//		}
-//	}
-	
 
 	
 	public static void main(String[] args){
