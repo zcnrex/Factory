@@ -1,12 +1,14 @@
 package czeng_CSCI201_assignment5a;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class TaskPiece {
+public class TaskPiece implements Serializable{
 	private Vector<Tool> tools = new Vector<Tool>();
 	private Vector<Station> stations = new Vector<Station>();
 	
 	public TaskPiece(){
+		super();
 //		tools = new Vector<Tool>();
 //		stations = new Vector<Station>();
 	}

@@ -1,14 +1,18 @@
 package czeng_CSCI201_assignment5a;
 
-public class Material extends Infrastructure{
+import java.io.Serializable;
+
+public class Material implements Serializable{
 	private String name;
 	private int num;
 	
 	public Material(){
+		super();
 		this.name = "";
 		this.num = 999;
 	}
 	public Material(String name){
+		super();
 		this.name = name;
 		this.num = 999;
 	}

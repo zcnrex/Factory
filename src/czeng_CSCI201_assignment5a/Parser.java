@@ -56,9 +56,9 @@ public class Parser {
 		}
 		
 
-//		System.out.println("num of files: " + sList.size());
+		System.out.println("num of files: " + sList.size());
 		for(int i = 0; i < sList.size(); i++){
-			System.out.println("num of files: " + sList.size());
+//			System.out.println("num of files: " + sList.size());
 			
 			sToken = new StringTokenizer(sList.get(i));
 //			while (sToken.hasMoreTokens()){
@@ -68,7 +68,10 @@ public class Parser {
 //				sToken.
 //				if (token.equals("[Widget]") || token.equals("[Cog]") || token.equals("[Gadget]")){
 				if (token.length()<9){
+//					System.out.println("before setup task: " + i);
 					setupTask(sToken, token);
+
+//					System.out.println("setup task: " + i);
 //					System.out.println(taskName + "1 " + token);
 				}
 //				else if (!token.substring(1, 7).equals("Worker")){
@@ -77,18 +80,22 @@ public class Parser {
 //					System.out.println(taskName + "2 " + token);
 //				}
 				else{
-					factory.setupFactory(sToken);
+//					System.out.println("before setup factory: " + i);
+
+					factory.setupFactory(sToken, token);
+
+//					System.out.println("setup factory: " + i);
 					continue;
 				}
 				
 				if (sToken.hasMoreElements()){
 				token = sToken.nextToken();
+//				continue;
 				}
-				else break;
+				else continue;
 //				while(token.contains(":")){
 //					
 //				}
-		
 		}
 //		taskPool.getTask(7).setName("sdfa");
 //		taskPool.getTask(3).getMaterial(0).setName("2434");
@@ -101,6 +108,8 @@ public class Parser {
 //		}
 
 //		System.out.println(taskPool.getTasks().size());
+
+		System.out.println("number of tasks: " + taskPool.getTasks().size());
 		factory.setTaskToJSP();
 		
 	}
@@ -180,8 +189,8 @@ public class Parser {
 //		}
 //			
 		}
-		System.out.println("Station name: " + task.getLastTaskPiece().getStation().getName());
-		System.out.println("Taskpiece number: " + task.getTaskPieces().size());
+//		System.out.println("Station name: " + task.getLastTaskPiece().getStation().getName());
+//		System.out.println("Taskpiece number: " + task.getTaskPieces().size());
 //		Task[] tasks = new Task[len];
 		Task newTask;
 //		Task newTask;
@@ -190,26 +199,27 @@ public class Parser {
 //			tasks[j] = new Task();
 //			tasks[j].setName(task.getName());
 			
-			newTask = new Task();
+//			newTask = new Task();
 //			newTask.setName(task.getName());
 //			newTask.se
 //			newTask.addMaterials(task.getMeterials());
 //			for (Material ma : task.getMeterials()){
 //				newTask.addMaterial(ma);
 //			}
-			newTask = task;
+//			newTask.addMaterials(task.getMeterials());
+//			newTask.
+//			newTask = task;
 			
 //			for (Material ma : task.getMeterials()){
 //				tasks[j].addMaterial(ma);
 //			}
 			
-			taskPool.addTask(newTask);
+			taskPool.addTask(Task.copy(task));
 //			jl[j] = new JLabel();
 //			jl[j].setText(name + "..." + task.getStatus());
 //			jspPanel.add(jl[j]);
 		}
-		System.out.println("number of tasks: " + taskPool.getTasks().size());
-		System.out.println("number of taskpieces in last task: " + taskPool.getTask(0).getTaskPieces().size());
+//		System.out.println("number of taskpieces in last task: " + taskPool.getTask(0).getTaskPieces().size());
 		
 	}
 	

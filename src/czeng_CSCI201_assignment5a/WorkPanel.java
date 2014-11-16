@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 class WorkPanel extends JPanel implements Runnable{
 //	private ImageIcon[] imgIcon = new ImageIcon[30];
 	private Vector<ImageIcon> imgIcon = new Vector<ImageIcon>();
-	private Vector<Worker> wokers = new Vector<Worker>();
+	private Vector<Worker> workers = new Vector<Worker>();
 	private Position position = new Position();
 	private Factory factory;
 	
@@ -28,14 +28,24 @@ class WorkPanel extends JPanel implements Runnable{
 
 	private Tasks tasks = new Tasks();
 	
-	Worker w;
+	private Worker w;
 	
-	WorkPanel(Tasks tasks, Factory factory){
+	WorkPanel(Tasks tasks, Factory factory, Vector<Worker> workers){
 		this.setLayout(null);	
 		this.tasks = tasks;
 		this.factory = factory;
-		 w = new Worker(position, factory);
-		w.start();	
+		this.workers = workers;
+//		for (int i = 0; i < factory.getTasks().getNumWorker(); i++){
+//		 w = new Worker(position, factory);
+//		 workers.add(w);
+//		 try {
+//			w.sleep(500);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		w.start();	
+//		}
 	}
 	
 	public void paintComponent(Graphics g){
@@ -84,7 +94,33 @@ class WorkPanel extends JPanel implements Runnable{
 					g.drawString((station.get((String)pairs.getKey())).getStatus(), ((int[])pairs.getValue())[0] + 3, ((int[])pairs.getValue())[1] - 5);
 				}
 			}
-		w.drawWorker(g);
+			for (int k = 0; k < workers.size(); k++){
+				workers.get(k).drawWorker(g);
+//				if (!workers.get(k).isAlive()){
+//					workers.get(k).start();
+//					try {
+//						workers.get(k).sleep(500);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+			}
+//			if(!workers.get(0).isAlive()){
+//			for (int k = 0; k < workers.size(); k++){
+////				workers.get(k).drawWorker(g);
+////				if (!workers.get(k).isAlive()){
+//					workers.get(k).start();
+//					try {
+//						workers.get(k).sleep(500);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+////				}
+//			}
+//			}
+//		w.drawWorker(g);
 		}
 		
 	}
@@ -94,6 +130,10 @@ class WorkPanel extends JPanel implements Runnable{
 			repaint();
 			revalidate();
 		}
+	}
+	
+	public Vector<Worker> getWorkers(){
+		return workers;
 	}
 	
 //	public static void main(String[] args){

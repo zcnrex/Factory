@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -59,6 +60,9 @@ public class Factory extends JFrame {
 	
 	private StringTokenizer sToken;
 	private String taskName;
+	
+	private Vector<Worker> workers = new Vector<Worker>();
+	private Position position = new Position();
 	
 		
 	public Factory(){
@@ -125,17 +129,25 @@ public class Factory extends JFrame {
 	
 	//Read and parse files 
 	public void getFile(){
-//		synchronized{
 		
 		Parser parser = new Parser(f, this, taskPool);
-//		}
-		//Set up containers
-//		WorkPanel wp = new WorkPanel();
-		workPanel = new WorkPanel(tasks, this);
+		Worker w;
+		for (int i = 0; i < this.getTasks().getNumWorker(); i++){
+			 w = new Worker(position, this);
+			 w.setWorkerNum(i);
+			 workers.add(w);
+			} 
+		
+		workPanel = new WorkPanel(tasks, this, workers);
 		workPanel.setBounds(0, 0, 600, 600);
 		Thread twp = new Thread(workPanel);
 		twp.start();
+
 		mainPanel.add(workPanel);
+		
+			for (int k = 0; k < workers.size(); k++){
+				workers.get(k).start();
+			}
 
 	}
 	
@@ -151,7 +163,7 @@ public class Factory extends JFrame {
 		jl = new JLabel[len];
 //		Task task;
 		for (int j = 0; j < len; j++){
-			System.out.println("len " + len);
+//			System.out.println("len " + len);
 //			task = new Task(taskName);
 //			taskPool.addTask(task);
 			jl[j] = new JLabel();
@@ -161,17 +173,16 @@ public class Factory extends JFrame {
 	}
 	
 	public void setJl(int i){
-		System.out.println("in Setjl: " + taskPool.getTask(i).getStatus());
+//		System.out.println("in Setjl: " + taskPool.getTask(i).getStatus());
 		jl[i].setText(taskPool.getTask(i).getName() + "..." + taskPool.getTask(i).getStatus());
 	}
 	
-	public void setupFactory(StringTokenizer st){
-		String s = "";
+	public void setupFactory(StringTokenizer st, String s){
+		
 		int i = 0;
 		String substring = "";
 //		Tasks t = new Tasks();
 		while(st.hasMoreTokens()){
-			s = st.nextToken();
 			int len = 0;
 			
 			//get number of tools the factory has
@@ -185,7 +196,12 @@ public class Factory extends JFrame {
 				tasks.setTool(substring+"s", len);
 			}
 			else if (substring.equals("Paintbrushe")) tasks.setTool("Paintbrush", len);
+			else if (substring.contains("Worker")){
+				tasks.setWorker(len);
+//				System.out.println(s.substring(1, s.indexOf(":")-1) + " : " + len);
+			}
 			else tasks.setTool(substring, len);
+			s = st.nextToken();
 		}
 	}
 	

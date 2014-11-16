@@ -8,6 +8,7 @@ public class Tasks {
 	private HashMap<String, Tool> tList;
 	private HashMap<String, Station> sList;
 	private String status, name;
+	private int numWorker = 0;
 	
 	public Tasks(){
 		mList = new HashMap<String, Material>();
@@ -66,6 +67,14 @@ public class Tasks {
 		sList.put("Painting4", s[13]);
 		s[14] = new Station("Press");
 		sList.put("Press1", s[14]);
+	}
+	
+	public void setWorker(int n){
+		this.numWorker = n;
+	}
+	
+	public int getNumWorker(){
+		return this.numWorker;
 	}
 	
 	public void setMaterial(String s, int n){

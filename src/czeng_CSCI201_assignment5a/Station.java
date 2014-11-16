@@ -1,24 +1,33 @@
 package czeng_CSCI201_assignment5a;
 
 import java.awt.Color;
+import java.io.Serializable;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class Station extends Infrastructure {
+public class Station implements Serializable{
 	private String name, status;
 	private int time;
+	private Lock lock = new ReentrantLock();
+	private Condition stationAvailable = lock.newCondition();
 	
 	public Station(){
+		super();
 		this.name = "";
 		this.time = 0;
 		this.status = "Open";
 	}
 
 	public Station(String name){
+		super();
 		this.name = name;
 		this.time = 0;
 		this.status = "Open";
 	}
 	
 	public Station(String name, int time){
+		super();
 		this.name = name;
 		this.time = time;
 		this.status = "Open";
@@ -57,4 +66,52 @@ public class Station extends Infrastructure {
 	
 	public void setNum(int n){}
 	public String getNum(){return "";}
+	
+	public Lock getLock(){
+		return lock;
+	}
+	
+	public void inUse(int[]p, int[] pos){
+		lock.lock();
+		try {
+
+//			System.out.println("!!!!!!!");
+			while(pos[1] < p[1] + 0){
+				Thread.sleep(1);				
+				pos[1]++;
+			}
+			while(pos[1] > p[1] + 0){
+				Thread.sleep(1);				
+				pos[1]--;
+			}
+			while(pos[0] < (p[0] + 0)){
+				Thread.sleep(1);				
+				pos[0]++;
+			}
+			while(pos[0] > (p[0] + 0)){
+				
+					Thread.sleep(1);
+				pos[0]--;
+			}
+		
+//			stationAvailable.await();
+			for(int i = 0; i < time; i ++){
+
+				setStatus((time-i) + "s");
+				Thread.sleep(1000);
+			}
+			setStatus("Open");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			lock.unlock();
+		}
+	}
+	
+	public void finished(){
+		lock.lock();
+		stationAvailable.signal();
+		lock.unlock();
+	}
 }

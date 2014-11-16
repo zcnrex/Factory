@@ -1,23 +1,29 @@
 package czeng_CSCI201_assignment5a;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class Task {
+public class Task implements Serializable{
 //	private HashMap<String, Material> mList;
 //	private HashMap<String, Tool> tList;
 //	private HashMap<String, Station> sList;
-	private String status, name;
-	private int numTask;
+	private String status = "", name = "";
+	private int numTask = 0;
 	
 	private Vector<TaskPiece> taskPieces = new Vector<TaskPiece>();
 	private Vector<Material> materials = new Vector<Material>();
 	
 	public Task(){
+		super();
 		status = "Not Built";
 	}
 	
 	public Task(String name){
+		super();
 		status = "Not Built";
 		this.name = name;
 //		this.numTask = num;
@@ -30,6 +36,7 @@ public class Task {
 	public TaskPiece getLastTaskPiece(){
 		return taskPieces.lastElement();
 	}
+	
 	public Vector<TaskPiece> getTaskPieces(){
 		return taskPieces;
 	}
@@ -65,6 +72,37 @@ public class Task {
 	public void setName(String name){
 		this.name = name;
 	}
+	
+	public static Task copy(Task orig) {
+        Task obj = null;
+        try {
+            // Write the object out to a byte array
+            FastByteArrayOutputStream fbos = 
+                    new FastByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(fbos);
+            out.writeObject(orig);
+            out.flush();
+            out.close();
+
+            // Retrieve an input stream from the byte array and read
+            // a copy of the object back in. 
+            ObjectInputStream in = 
+                new ObjectInputStream(fbos.getInputStream());
+            obj = (Task) in.readObject();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        catch(ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        }
+        return obj;
+    }
+	
+//	public void setTask(Task task){
+//		thisx = new Task();
+//		
+//	}
 	
 //	public static void main(String[] args){
 //		Task t = new Task();

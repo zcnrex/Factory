@@ -1,22 +1,27 @@
 package czeng_CSCI201_assignment5a;
 
-public class Tool extends Infrastructure{
+import java.io.Serializable;
+
+public class Tool implements Serializable{
 	private String name;
 	private int sum, num;
 	
 	public Tool(){
+		super();
 		this.name = "";
 		this.num = 5;
 		this.sum = 5;
 	}
 	
 	public Tool(String name){
+		super();
 		this.name = name;
 		this.num = 5;
 		this.sum = 5;
 	}
 	
 	public Tool(String name, int sum){
+		super();
 		this.name = name;
 		this.sum = sum;
 		this.num = sum;
@@ -34,13 +39,17 @@ public class Tool extends Infrastructure{
 	public void takeTool(int n){
 		this.num -= n;
 	}
-	
+		
 	public void returnTool(int n){
 		this.num += n;
 	}
 	
 	public String getNum(){
 		return (num + "/" + sum);
+	}
+	
+	public int getNumber(){
+		return num;
 	}
 	
 	public String getName(){
