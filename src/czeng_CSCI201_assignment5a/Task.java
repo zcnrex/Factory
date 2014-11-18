@@ -1,5 +1,9 @@
 package czeng_CSCI201_assignment5a;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -73,17 +77,16 @@ public class Task implements Serializable{
         Task obj = null;
         try {
             // Write the object out to a byte array
-            FastByteArrayOutputStream fbos = 
-                    new FastByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(fbos);
+        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        	ObjectOutputStream out = new ObjectOutputStream(baos);
             out.writeObject(orig);
             out.flush();
             out.close();
 
             // Retrieve an input stream from the byte array and read
             // a copy of the object back in. 
-            ObjectInputStream in = 
-                new ObjectInputStream(fbos.getInputStream());
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(bais);
             obj = (Task) in.readObject();
         }
         catch(IOException e) {
