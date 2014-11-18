@@ -18,10 +18,7 @@ public class MainPanel extends JPanel implements Runnable{
 	}
 	
 	public void run(){
-		while(true){
-//			repaint();
-			revalidate();
-		}
+		revalidate();
 	}
 
 }

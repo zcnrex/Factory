@@ -116,8 +116,20 @@ public class Factory extends JFrame {
 		});
 		setVisible(true);
 		while(true){
-			if(taskPool.getTasks().size()>0)
-			if(taskPool.getRecentTask().getStatus().equals("Complete!")){
+			if(taskPool.getTasks().size()>0){
+//			if(taskPool.getRecentTask().getStatus().equals("Complete!")){
+				boolean complete = false;
+				while(true){
+					complete = true;
+					for (int k = 0; k < taskPool.getSize(); k++){
+						if(!taskPool.getTask(k).getStatus().equals("Complete!")) {
+							complete = false;
+							break;
+						}
+					}
+					if (complete) break;
+				}
+			
 				int selection = JOptionPane.showConfirmDialog(this, "Want to play again?", "Complete!", JOptionPane.YES_NO_OPTION);
 				switch (selection) {
 					case JOptionPane.YES_OPTION:
@@ -240,7 +252,6 @@ public class Factory extends JFrame {
 	
 	public static void main(String[] args){
 		Factory f = new Factory();
-		ArrayList<Integer> s = new ArrayList<Integer>();
 		
 	}
 }
