@@ -45,9 +45,6 @@ public class Factory extends JFrame {
 	private JLabel[] jl;
 	
 	private File[] f;
-	private StringBuffer sb;
-	private BufferedReader br;
-	private ArrayList<String> sList;
 	
 	private Tasks tasks = new Tasks(); // this stores every material and tool the factory possesses
 	private TaskPool taskPool = new TaskPool();
@@ -57,10 +54,6 @@ public class Factory extends JFrame {
 	private WorkPanel workPanel;
 	private JPanel boardPanel;
 	private JLabel boardLabel;
-	private ArrayList<JLabel> taskList;
-	
-	private StringTokenizer sToken;
-	private String taskName;
 	
 	private Vector<Worker> workers = new Vector<Worker>();
 	private Position position = new Position();
@@ -116,57 +109,47 @@ public class Factory extends JFrame {
 		});
 		setVisible(true);
 		while(true){
-			if(taskPool.getTasks().size()>0){
-//			if(taskPool.getRecentTask().getStatus().equals("Complete!")){
-				boolean complete = false;
-				while(true){
-					complete = true;
-					for (int k = 0; k < taskPool.getSize(); k++){
-						if(!taskPool.getTask(k).getStatus().equals("Complete!")) {
-							complete = false;
-							break;
-						}
-					}
-					if (complete) break;
-				}
+			if((taskPool.getTasks().size()>0) && (!workers.isEmpty())){
+				if(((int[])workers.get(0).getPosition())[0] == 1000){
+				
+					int selection = JOptionPane.showConfirmDialog(this, "Want to play again?", "Complete!", JOptionPane.YES_NO_OPTION);
+					switch (selection) {
+						case JOptionPane.YES_OPTION:
+							for (int k = 0; k < workers.size(); k++){
+								workers.get(k).interrupt();
+								
+							}
+							taskPool = null;
+							taskPool = new TaskPool();
+							tasks = null;
+							tasks = new Tasks();
+							workers = null;
+							workers = new Vector<Worker>();
+							mainPanel.remove(workPanel);
+							jl = null;
+							jspPanel = null;
+							jspPanel = new JPanel();
+							jspPanel.setLayout(new BoxLayout(jspPanel, BoxLayout.Y_AXIS));
+							jsp = null;
+							jsp = new JScrollPane(jspPanel);
+							jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+							jsp.setMaximumSize(new Dimension(200, 10000));
+							boardPanel.remove(jsp);
+							boardPanel.add(jsp, BorderLayout.CENTER);
+							JFileChooser fc = new JFileChooser();
+							fc.setDialogTitle("Choose a file");
+							fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+							int choice = fc.showOpenDialog(openFolder);
+							if(choice == JFileChooser.APPROVE_OPTION){
+								f = fc.getSelectedFile().listFiles();
 			
-				int selection = JOptionPane.showConfirmDialog(this, "Want to play again?", "Complete!", JOptionPane.YES_NO_OPTION);
-				switch (selection) {
-					case JOptionPane.YES_OPTION:
-						for (int k = 0; k < workers.size(); k++){
-							workers.get(k).interrupt();
-							
-						}
-						taskPool = null;
-						taskPool = new TaskPool();
-						tasks = null;
-						tasks = new Tasks();
-						workers = null;
-						workers = new Vector<Worker>();
-						mainPanel.remove(workPanel);
-						jl = null;
-						jspPanel = null;
-						jspPanel = new JPanel();
-						jspPanel.setLayout(new BoxLayout(jspPanel, BoxLayout.Y_AXIS));
-						jsp = null;
-						jsp = new JScrollPane(jspPanel);
-						jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-						jsp.setMaximumSize(new Dimension(200, 10000));
-						boardPanel.remove(jsp);
-						boardPanel.add(jsp, BorderLayout.CENTER);
-						JFileChooser fc = new JFileChooser();
-						fc.setDialogTitle("Choose a file");
-						fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						int choice = fc.showOpenDialog(openFolder);
-						if(choice == JFileChooser.APPROVE_OPTION){
-							f = fc.getSelectedFile().listFiles();
-		
-							getFile();			
-						}
-						break;
-					case JOptionPane.NO_OPTION: 
-						System.exit(NORMAL);
-						break;
+								getFile();			
+							}
+							break;
+						case JOptionPane.NO_OPTION: 
+							System.exit(NORMAL);
+							break;
+					}
 				}
 			}
 		}

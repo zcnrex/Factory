@@ -23,9 +23,6 @@ public class Worker extends Thread{
 	private int workerNum;
 	
 	
-	private Lock lock = new ReentrantLock();
-	private Condition stationAvailable = lock.newCondition();
-	
 	Worker(){
 		pos = new int[2];
 		pos[0] = 0;

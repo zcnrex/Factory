@@ -13,7 +13,6 @@ import java.util.Vector;
 
 public class Task implements Serializable{
 	private String status = "", name = "";
-	private int numTask = 0;
 	
 	private Vector<TaskPiece> taskPieces = new Vector<TaskPiece>();
 	private Vector<Material> materials = new Vector<Material>();

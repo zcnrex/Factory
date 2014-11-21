@@ -8,7 +8,6 @@ public class Tasks {
 	private HashMap<String, Tool> tList;
 	private HashMap<String, Station> sList;
 	private HashMap<String, Integer> toolNumList;
-	private String status, name;
 	private int numWorker = 0;
 	
 	public Tasks(){

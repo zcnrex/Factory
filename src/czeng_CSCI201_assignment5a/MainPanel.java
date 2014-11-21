@@ -10,9 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class MainPanel extends JPanel implements Runnable{
-	private JPanel boardPanel = new JPanel(), jspPanel = new JPanel();
-	private JScrollPane jsp;
-	private JLabel boardLabel = new JLabel("Task Board");
 	public MainPanel(){
 		this.setLayout(null);
 	}

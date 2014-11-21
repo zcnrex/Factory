@@ -23,7 +23,6 @@ public class Parser {
 
 	private StringTokenizer sToken;
 	private String taskName, token;
-	private Vector<JLabel> jl = new Vector<JLabel>();
 	
 	
 	public Parser(File[] files, Factory factory, TaskPool taskPool){

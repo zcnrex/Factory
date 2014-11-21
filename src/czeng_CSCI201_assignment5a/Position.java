@@ -4,15 +4,9 @@ import java.util.HashMap;
 
 public class Position {
 	private int[][] pos;
-	private int anvil, workbench, furnace, saw, painting;
 	private HashMap<String, int[]> hashmap;
 	
 	Position(){
-		anvil = 0;
-		workbench = 0;
-		furnace = 0;
-		saw = 0;
-		painting = 0;
 		pos = new int[29][2];
 		hashmap = new HashMap<String, int[]>();
 		setPosition();
