@@ -208,7 +208,6 @@ public class Worker extends Thread{
 				pos[0]--;
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

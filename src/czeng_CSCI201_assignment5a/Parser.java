@@ -87,7 +87,7 @@ public class Parser {
 		for (int j = 0; j < tk.length()-1; j++){
 			len += (int) (Math.pow(10, j) * (Character.getNumericValue(tk.charAt(tk.length()-j-1))));
 		}
-
+		if(len != 0){
 		Task task = new Task(taskName);
 		int num = 0;
 		tk = st.nextToken();
@@ -112,19 +112,22 @@ public class Parser {
 				if (tk.contains("x")){
 					setTools(st, task.getLastTaskPiece(), tk);
 					if(st.hasMoreElements()){
-					tk = st.nextToken();
+						tk = st.nextToken();
 					}
 					else break;
 				}
 				else{
 					setStation(st, task.getLastTaskPiece(), tk);
-					tk = st.nextToken();
+					if(st.hasMoreElements()){
+						tk = st.nextToken();
+					}
 				}
 				continue;
 			}
 		}
 		for (int j = 0; j < len; j++){			
 			taskPool.addTask(Task.copy(task));
+		}
 		}
 		
 	}
